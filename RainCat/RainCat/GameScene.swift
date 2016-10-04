@@ -30,7 +30,7 @@ class GameScene: SKScene
         
         addChild(floorNode)
         
-        whiteUmbrella.position = CGPoint(x: frame.midX, y: frame.midY)
+        whiteUmbrella.updatePosition(point: CGPoint(x: frame.midX, y: frame.midY))
         addChild(whiteUmbrella)
         //this could also be accomplished with an SKSpriteNode and just set the color without adding a texture.  Either way will work, and since it's just a temporary red rectangle, both ways are technically correct.
     }
@@ -50,12 +50,22 @@ class GameScene: SKScene
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)
     {
+        let touchPoint = touches.first?.location(in: self)
         
+        if let point = touchPoint
+        {
+            whiteUmbrella.setDestination(destination: point)
+        }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?)
     {
+        let touchPoint = touches.first?.location(in: self)
         
+        if let point = touchPoint
+        {
+            whiteUmbrella.setDestination(destination: point)
+        }
     }
     
     override func update(_ currentTime: TimeInterval)
@@ -80,5 +90,7 @@ class GameScene: SKScene
             currentRainDropSpawnTime = 0
             spawnRainDrop()
         }
+        
+        whiteUmbrella.update(deltaTime: dt)
     }
 }
