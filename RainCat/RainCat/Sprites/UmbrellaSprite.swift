@@ -30,6 +30,8 @@ public class UmbrellaSprite: SKSpriteNode
         whiteUmbrella.physicsBody?.restitution = 0.9 //bounciness of physics body
         whiteUmbrella.physicsBody?.contactTestBitMask = RainDropCategory
         
+        whiteUmbrella.zPosition = 1
+        
         return whiteUmbrella
     }
     

@@ -35,9 +35,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         self.physicsWorld.contactDelegate = self
         self.physicsBody?.categoryBitMask = WorldFrameCategory
         
+        let viewBackground = SKSpriteNode(imageNamed: "background")
+        viewBackground.position = CGPoint(x: frame.midX, y: frame.midY)
+        viewBackground.zPosition = 0
+        
+        addChild(viewBackground)
+        
         let floorNode = SKShapeNode(rectOf: CGSize(width: size.width, height: 5))
         floorNode.position = CGPoint(x: size.width / 2, y: 50)
-        floorNode.fillColor = SKColor.red
+//        floorNode.fillColor = SKColor.red
         floorNode.physicsBody = SKPhysicsBody(edgeFrom: CGPoint(x: -size.width / 2, y: 0), to: CGPoint(x: size.width, y: 0))
         floorNode.physicsBody?.categoryBitMask = FloorCategory
         floorNode.physicsBody?.contactTestBitMask = RainDropCategory
@@ -45,6 +51,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         addChild(floorNode)
         
         whiteUmbrella.updatePosition(point: CGPoint(x: frame.midX, y: frame.midY))
+        
         addChild(whiteUmbrella)
         //this could also be accomplished with an SKSpriteNode and just set the color without adding a texture.  Either way will work, and since it's just a temporary red rectangle, both ways are technically correct.
     }
@@ -61,6 +68,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         
         let randomPosition = abs(CGFloat(random.nextInt()).truncatingRemainder(dividingBy: size.width))
         rainDrop.position = CGPoint(x: randomPosition, y: size.height)
+        rainDrop.zPosition = 2
         
         addChild(rainDrop)
     }
