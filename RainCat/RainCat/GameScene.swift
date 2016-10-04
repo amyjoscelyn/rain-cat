@@ -15,7 +15,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate
     private var lastUpdateTime: TimeInterval = 0
     
     private var currentRainDropSpawnTime: TimeInterval = 0
-    private var rainDropSpawnRate: TimeInterval = 0.16
+    private var rainDropSpawnRate: TimeInterval = 0.5
     private let random = GKARC4RandomSource()
     
     private let whiteUmbrella = UmbrellaSprite.newInstance()
@@ -24,8 +24,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate
     {
         self.lastUpdateTime = 0
         
+        var worldFrame = frame
+        worldFrame.origin.x -= 100
+        worldFrame.origin.y -= 100
+        worldFrame.size.height += 200
+        worldFrame.size.width += 200
+        
+        self.physicsBody = SKPhysicsBody(edgeLoopFrom: worldFrame)
         //necessary with SKPhysicsContactDelegate
         self.physicsWorld.contactDelegate = self
+        self.physicsBody?.categoryBitMask = WorldFrameCategory
         
         let floorNode = SKShapeNode(rectOf: CGSize(width: size.width, height: 5))
         floorNode.position = CGPoint(x: size.width / 2, y: 50)
@@ -48,6 +56,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         rainDrop.fillColor = SKColor.blue
         rainDrop.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 20, height: 20))
         rainDrop.physicsBody?.categoryBitMask = RainDropCategory
+        rainDrop.physicsBody?.contactTestBitMask = WorldFrameCategory
+        rainDrop.physicsBody?.restitution = 0.3
         
         let randomPosition = abs(CGFloat(random.nextInt()).truncatingRemainder(dividingBy: size.width))
         rainDrop.position = CGPoint(x: randomPosition, y: size.height)
@@ -110,6 +120,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         else if contact.bodyB.categoryBitMask == RainDropCategory
         {
             contact.bodyB.node?.physicsBody?.collisionBitMask = 0
+        }
+        
+        if contact.bodyA.categoryBitMask == WorldFrameCategory
+        {
+            contact.bodyB.node?.removeFromParent()
+            contact.bodyB.node?.physicsBody = nil
+            contact.bodyB.node?.removeAllActions()
+        }
+        else if contact.bodyB.categoryBitMask == WorldFrameCategory
+        {
+            contact.bodyA.node?.removeFromParent()
+            contact.bodyA.node?.physicsBody = nil
+            contact.bodyA.node?.removeAllActions()
         }
     }
 }

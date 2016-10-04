@@ -27,6 +27,7 @@ public class UmbrellaSprite: SKSpriteNode
         whiteUmbrella.physicsBody = SKPhysicsBody(polygonFrom: path.cgPath)
         whiteUmbrella.physicsBody?.isDynamic = false
         whiteUmbrella.physicsBody?.categoryBitMask = UmbrellaCategory
+        whiteUmbrella.physicsBody?.restitution = 0.9 //bounciness of physics body
         whiteUmbrella.physicsBody?.contactTestBitMask = RainDropCategory
         
         return whiteUmbrella
