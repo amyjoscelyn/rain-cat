@@ -9,12 +9,13 @@
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene
+//must conform (inherit?) to SKPhysicsContactDelegate to provide us with functions to be called when two SKPhysicsBodys begin and end collision
+class GameScene: SKScene, SKPhysicsContactDelegate
 {
     private var lastUpdateTime: TimeInterval = 0
     
     private var currentRainDropSpawnTime: TimeInterval = 0
-    private var rainDropSpawnRate: TimeInterval = 0.5
+    private var rainDropSpawnRate: TimeInterval = 0.16
     private let random = GKARC4RandomSource()
     
     private let whiteUmbrella = UmbrellaSprite.newInstance()
@@ -23,10 +24,15 @@ class GameScene: SKScene
     {
         self.lastUpdateTime = 0
         
+        //necessary with SKPhysicsContactDelegate
+        self.physicsWorld.contactDelegate = self
+        
         let floorNode = SKShapeNode(rectOf: CGSize(width: size.width, height: 5))
         floorNode.position = CGPoint(x: size.width / 2, y: 50)
         floorNode.fillColor = SKColor.red
         floorNode.physicsBody = SKPhysicsBody(edgeFrom: CGPoint(x: -size.width / 2, y: 0), to: CGPoint(x: size.width, y: 0))
+        floorNode.physicsBody?.categoryBitMask = FloorCategory
+        floorNode.physicsBody?.contactTestBitMask = RainDropCategory
         
         addChild(floorNode)
         
@@ -41,6 +47,7 @@ class GameScene: SKScene
         rainDrop.position = CGPoint(x: size.width / 2, y: size.height / 2)
         rainDrop.fillColor = SKColor.blue
         rainDrop.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 20, height: 20))
+        rainDrop.physicsBody?.categoryBitMask = RainDropCategory
         
         let randomPosition = abs(CGFloat(random.nextInt()).truncatingRemainder(dividingBy: size.width))
         rainDrop.position = CGPoint(x: randomPosition, y: size.height)
@@ -92,5 +99,17 @@ class GameScene: SKScene
         }
         
         whiteUmbrella.update(deltaTime: dt)
+    }
+    
+    func didBegin(_ contact: SKPhysicsContact)
+    {
+        if contact.bodyA.categoryBitMask == RainDropCategory
+        {
+            contact.bodyA.node?.physicsBody?.collisionBitMask = 0
+        }
+        else if contact.bodyB.categoryBitMask == RainDropCategory
+        {
+            contact.bodyB.node?.physicsBody?.collisionBitMask = 0
+        }
     }
 }
