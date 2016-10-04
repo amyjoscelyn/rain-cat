@@ -19,6 +19,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate
     private let random = GKARC4RandomSource()
     
     private let whiteUmbrella = UmbrellaSprite.newInstance()
+    private var cat: CatSprite!
+    private let rainDropTexture = SKTexture(imageNamed: "rain_drop")
     
     override func sceneDidLoad()
     {
@@ -54,23 +56,41 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         
         addChild(whiteUmbrella)
         //this could also be accomplished with an SKSpriteNode and just set the color without adding a texture.  Either way will work, and since it's just a temporary red rectangle, both ways are technically correct.
+        
+        spawnCat()
     }
     
     func spawnRainDrop()
     {
-        let rainDrop = SKShapeNode(rectOf: CGSize(width: 20, height: 20))
+        let rainDrop = SKSpriteNode(texture: rainDropTexture)
         rainDrop.position = CGPoint(x: size.width / 2, y: size.height / 2)
-        rainDrop.fillColor = SKColor.blue
+        rainDrop.zPosition = 2
         rainDrop.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 20, height: 20))
+//        rainDrop.physicsBody = SKPhysicsBody(texture: rainDropTexture, size: rainDrop.size)
         rainDrop.physicsBody?.categoryBitMask = RainDropCategory
         rainDrop.physicsBody?.contactTestBitMask = WorldFrameCategory
         rainDrop.physicsBody?.restitution = 0.3
         
         let randomPosition = abs(CGFloat(random.nextInt()).truncatingRemainder(dividingBy: size.width))
         rainDrop.position = CGPoint(x: randomPosition, y: size.height)
-        rainDrop.zPosition = 2
+        
         
         addChild(rainDrop)
+    }
+    
+    func spawnCat()
+    {
+        if let currentCat = cat, children.contains(currentCat)
+        {
+            cat.removeFromParent()
+            cat.removeAllActions()
+            cat.physicsBody = nil
+        }
+        
+        cat = CatSprite.newInstance()
+        cat.position = CGPoint(x: whiteUmbrella.position.x, y: whiteUmbrella.position.y - 30)
+        
+        addChild(cat)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)
@@ -130,6 +150,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate
             contact.bodyB.node?.physicsBody?.collisionBitMask = 0
         }
         
+        if contact.bodyA.categoryBitMask == CatCategory || contact.bodyB.categoryBitMask == CatCategory
+        {
+            handleCatCollision(contact: contact)
+            
+            return
+        }
+        
         if contact.bodyA.categoryBitMask == WorldFrameCategory
         {
             contact.bodyB.node?.removeFromParent()
@@ -141,6 +168,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate
             contact.bodyA.node?.removeFromParent()
             contact.bodyA.node?.physicsBody = nil
             contact.bodyA.node?.removeAllActions()
+        }
+    }
+    
+    func handleCatCollision(contact: SKPhysicsContact)
+    {
+        var otherBody: SKPhysicsBody
+        
+        if contact.bodyA.categoryBitMask == CatCategory
+        {
+            otherBody = contact.bodyB
+        }
+        else
+        {
+            otherBody = contact.bodyA
+        }
+        
+        switch otherBody.categoryBitMask
+        {
+        case RainDropCategory:
+            print("Rain hit the cat")
+        case WorldFrameCategory:
+            spawnCat()
+        default:
+            print("Something hit the cat")
         }
     }
 }
