@@ -51,6 +51,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         floorNode.physicsBody = SKPhysicsBody(edgeFrom: CGPoint(x: -size.width / 2, y: 0), to: CGPoint(x: size.width, y: 0))
         floorNode.physicsBody?.categoryBitMask = FloorCategory
         floorNode.physicsBody?.contactTestBitMask = RainDropCategory
+        floorNode.physicsBody?.restitution = 0.3
         
         addChild(floorNode)
         
@@ -72,7 +73,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate
 //        rainDrop.physicsBody = SKPhysicsBody(texture: rainDropTexture, size: rainDrop.size)
         rainDrop.physicsBody?.categoryBitMask = RainDropCategory
         rainDrop.physicsBody?.contactTestBitMask = WorldFrameCategory
-        rainDrop.physicsBody?.restitution = 0.3
         rainDrop.physicsBody?.density = 0.5
         
         let randomPosition = abs(CGFloat(random.nextInt()).truncatingRemainder(dividingBy: size.width))
