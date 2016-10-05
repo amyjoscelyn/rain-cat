@@ -10,6 +10,7 @@
 		3D143A981DA329B300CE3953 /* UmbrellaSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D143A971DA329B300CE3953 /* UmbrellaSprite.swift */; };
 		3D143A9B1DA43FEC00CE3953 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D143A9A1DA43FEC00CE3953 /* Constants.swift */; };
 		3D143A9D1DA44F9600CE3953 /* CatSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D143A9C1DA44F9600CE3953 /* CatSprite.swift */; };
+		3D143A9F1DA4792D00CE3953 /* FoodSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D143A9E1DA4792D00CE3953 /* FoodSprite.swift */; };
 		3D9D23701DA2FA7200736B21 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9D236F1DA2FA7200736B21 /* AppDelegate.swift */; };
 		3D9D23761DA2FA7200736B21 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9D23751DA2FA7200736B21 /* GameScene.swift */; };
 		3D9D23781DA2FA7200736B21 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9D23771DA2FA7200736B21 /* GameViewController.swift */; };
@@ -22,6 +23,7 @@
 		3D143A971DA329B300CE3953 /* UmbrellaSprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UmbrellaSprite.swift; path = Sprites/UmbrellaSprite.swift; sourceTree = "<group>"; };
 		3D143A9A1DA43FEC00CE3953 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = Support/Constants.swift; sourceTree = "<group>"; };
 		3D143A9C1DA44F9600CE3953 /* CatSprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CatSprite.swift; path = Sprites/CatSprite.swift; sourceTree = "<group>"; };
+		3D143A9E1DA4792D00CE3953 /* FoodSprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FoodSprite.swift; path = Sprites/FoodSprite.swift; sourceTree = "<group>"; };
 		3D9D236C1DA2FA7200736B21 /* RainCat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RainCat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D9D236F1DA2FA7200736B21 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3D9D23751DA2FA7200736B21 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
@@ -64,6 +66,7 @@
 			children = (
 				3D143A971DA329B300CE3953 /* UmbrellaSprite.swift */,
 				3D143A9C1DA44F9600CE3953 /* CatSprite.swift */,
+				3D143A9E1DA4792D00CE3953 /* FoodSprite.swift */,
 			);
 			name = Sprites;
 			sourceTree = "<group>";
@@ -184,6 +187,7 @@
 				3D143A9B1DA43FEC00CE3953 /* Constants.swift in Sources */,
 				3D9D23761DA2FA7200736B21 /* GameScene.swift in Sources */,
 				3D9D23781DA2FA7200736B21 /* GameViewController.swift in Sources */,
+				3D143A9F1DA4792D00CE3953 /* FoodSprite.swift in Sources */,
 				3D143A9D1DA44F9600CE3953 /* CatSprite.swift in Sources */,
 				3D143A981DA329B300CE3953 /* UmbrellaSprite.swift in Sources */,
 				3D9D23701DA2FA7200736B21 /* AppDelegate.swift in Sources */,

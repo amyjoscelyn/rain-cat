@@ -17,6 +17,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate
     private var currentRainDropSpawnTime: TimeInterval = 0
     private var rainDropSpawnRate: TimeInterval = 0.5
     private let random = GKARC4RandomSource()
+    private let foodEdgeMargin: CGFloat = 75.0
     
     private let whiteUmbrella = UmbrellaSprite.newInstance()
     private var cat: CatSprite!
@@ -58,6 +59,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         //this could also be accomplished with an SKSpriteNode and just set the color without adding a texture.  Either way will work, and since it's just a temporary red rectangle, both ways are technically correct.
         
         spawnCat()
+        spawnFood()
     }
     
     func spawnRainDrop()
@@ -91,6 +93,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         cat.position = CGPoint(x: whiteUmbrella.position.x, y: whiteUmbrella.position.y - 30)
         
         addChild(cat)
+    }
+    
+    func spawnFood()
+    {
+        let food = FoodSprite.newInstance()
+        var randomPosition: CGFloat = CGFloat(random.nextInt())
+        randomPosition = randomPosition.truncatingRemainder(dividingBy: size.width - foodEdgeMargin * 2)
+        randomPosition = CGFloat(abs(randomPosition))
+        randomPosition += foodEdgeMargin
+        
+        food.position = CGPoint(x: randomPosition, y: size.height)
+        
+        addChild(food)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)
@@ -150,6 +165,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate
             contact.bodyB.node?.physicsBody?.collisionBitMask = 0
         }
         
+        if contact.bodyA.categoryBitMask == FoodCategory || contact.bodyB.categoryBitMask == FoodCategory
+        {
+            handleFoodHit(contact: contact)
+            
+            return
+        }
+        
         if contact.bodyA.categoryBitMask == CatCategory || contact.bodyB.categoryBitMask == CatCategory
         {
             handleCatCollision(contact: contact)
@@ -192,6 +214,38 @@ class GameScene: SKScene, SKPhysicsContactDelegate
             spawnCat()
         default:
             print("Something hit the cat")
+        }
+    }
+    
+    func handleFoodHit(contact: SKPhysicsContact)
+    {
+        var otherBody: SKPhysicsBody
+        var foodBody: SKPhysicsBody
+        
+        if contact.bodyA.categoryBitMask == FoodCategory
+        {
+            otherBody = contact.bodyB
+            foodBody = contact.bodyA
+        }
+        else
+        {
+            otherBody = contact.bodyA
+            foodBody = contact.bodyB
+        }
+        
+        switch otherBody.categoryBitMask
+        {
+        case CatCategory:
+            //TO-DO: Increment points
+            print("Cat fed!")
+            fallthrough
+        case WorldFrameCategory:
+            foodBody.node?.removeFromParent()
+            foodBody.node?.physicsBody = nil
+            
+            spawnFood()
+        default:
+            print("Something else touched the food")
         }
     }
 }
