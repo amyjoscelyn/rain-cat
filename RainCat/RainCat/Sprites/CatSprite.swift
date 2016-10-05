@@ -16,6 +16,8 @@ public class CatSprite: SKSpriteNode
         SKTexture(imageNamed: "cat_two")
     ]
     private let movementSpeed: CGFloat = 100
+    private var timeSinceLastHit: TimeInterval = 2
+    private let maxFlailTime: TimeInterval = 2
     
     public static func newInstance() -> CatSprite
     {
@@ -31,29 +33,40 @@ public class CatSprite: SKSpriteNode
     
     public func update(deltaTime: TimeInterval, foodLocation: CGPoint)
     {
-        if action(forKey: walkingActionKey) == nil
-        {
-            //this is a nested SKAction
-            let walkingAction = SKAction.repeatForever(
-                SKAction.animate(with: walkFrames,
-                                 timePerFrame: 0.1,
-                                 resize: false,
-                                 restore: true))
-            
-            run(walkingAction, withKey: walkingActionKey)
-        }
+        timeSinceLastHit += deltaTime
         
-        if foodLocation.x < position.x
+        if timeSinceLastHit >= maxFlailTime
         {
-            //Food is left
-            position.x -= movementSpeed * CGFloat(deltaTime)
-            xScale = -1
+            if action(forKey: walkingActionKey) == nil
+            {
+                //this is a nested SKAction
+                let walkingAction = SKAction.repeatForever(
+                    SKAction.animate(with: walkFrames,
+                                     timePerFrame: 0.1,
+                                     resize: false,
+                                     restore: true))
+                
+                run(walkingAction, withKey: walkingActionKey)
+            }
+            
+            if foodLocation.x < position.x
+            {
+                //Food is left
+                position.x -= movementSpeed * CGFloat(deltaTime)
+                xScale = -1
+            }
+            else
+            {
+                //Food is right
+                position.x += movementSpeed * CGFloat(deltaTime)
+                xScale = 1
+            }
         }
-        else
-        {
-            //Food is right
-            position.x += movementSpeed * CGFloat(deltaTime)
-            xScale = 1
-        }
+    }
+    
+    public func hitByRain()
+    {
+        timeSinceLastHit = 0
+        removeAction(forKey: walkingActionKey)
     }
 }

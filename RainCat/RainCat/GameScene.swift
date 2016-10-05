@@ -211,7 +211,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         switch otherBody.categoryBitMask
         {
         case RainDropCategory:
-            print("Rain hit the cat")
+            cat.hitByRain()
         case WorldFrameCategory:
             spawnCat()
         default:
