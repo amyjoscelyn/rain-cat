@@ -52,15 +52,22 @@ public class CatSprite: SKSpriteNode
             if foodLocation.x < position.x
             {
                 //Food is left
-                position.x -= movementSpeed * CGFloat(deltaTime)
+                physicsBody?.velocity.dx = -movementSpeed
                 xScale = -1
             }
             else
             {
                 //Food is right
-                position.x += movementSpeed * CGFloat(deltaTime)
+                physicsBody?.velocity.dx = movementSpeed
                 xScale = 1
             }
+            
+            physicsBody?.angularVelocity = 0
+        }
+        
+        if zRotation != 0 && action(forKey: "action_rotate") == nil
+        {
+            run(SKAction.rotate(toAngle: 0, duration: 0.25), withKey: "action_rotate")
         }
     }
     

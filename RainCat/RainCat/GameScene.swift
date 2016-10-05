@@ -73,6 +73,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         rainDrop.physicsBody?.categoryBitMask = RainDropCategory
         rainDrop.physicsBody?.contactTestBitMask = WorldFrameCategory
         rainDrop.physicsBody?.restitution = 0.3
+        rainDrop.physicsBody?.density = 0.5
         
         let randomPosition = abs(CGFloat(random.nextInt()).truncatingRemainder(dividingBy: size.width))
         rainDrop.position = CGPoint(x: randomPosition, y: size.height)
