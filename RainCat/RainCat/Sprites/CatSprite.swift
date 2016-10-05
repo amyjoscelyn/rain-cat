@@ -15,9 +15,19 @@ public class CatSprite: SKSpriteNode
         SKTexture(imageNamed: "cat_one"),
         SKTexture(imageNamed: "cat_two")
     ]
+    private let meowSFX = [
+        "cat_meow_1.mp3",
+        "cat_meow_2.mp3",
+        "cat_meow_3.mp3",
+        "cat_meow_4.mp3",
+        "cat_meow_5.wav",
+        "cat_meow_6.wav"
+    ]
     private let movementSpeed: CGFloat = 100
     private var timeSinceLastHit: TimeInterval = 2
     private let maxFlailTime: TimeInterval = 2
+    private var currentRainHits = 4
+    private let maxRainHits = 4
     
     public static func newInstance() -> CatSprite
     {
@@ -75,5 +85,21 @@ public class CatSprite: SKSpriteNode
     {
         timeSinceLastHit = 0
         removeAction(forKey: walkingActionKey)
+        
+        //Determine if we should meow or not
+        if currentRainHits < maxRainHits
+        {
+            currentRainHits += 1
+            return
+        }
+        
+        if action(forKey: "action_sound_effect") == nil
+        {
+            currentRainHits = 0
+            
+        let selectedSFX = Int(arc4random_uniform(UInt32(meowSFX.count)))
+            
+            run(SKAction.playSoundFileNamed(meowSFX[selectedSFX], waitForCompletion: true), withKey: "action_sound_effect")
+        }
     }
 }
