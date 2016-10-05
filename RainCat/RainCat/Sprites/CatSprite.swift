@@ -10,6 +10,13 @@ import SpriteKit
 
 public class CatSprite: SKSpriteNode
 {
+    private let walkingActionKey = "action_walking"
+    private let walkFrames = [
+        SKTexture(imageNamed: "cat_one"),
+        SKTexture(imageNamed: "cat_two")
+    ]
+    private let movementSpeed: CGFloat = 100
+    
     public static func newInstance() -> CatSprite
     {
         let catSprite = CatSprite(imageNamed: "cat_one")
@@ -22,8 +29,31 @@ public class CatSprite: SKSpriteNode
         return catSprite
     }
     
-    public func update(deltaTime: TimeInterval)
+    public func update(deltaTime: TimeInterval, foodLocation: CGPoint)
     {
+        if action(forKey: walkingActionKey) == nil
+        {
+            //this is a nested SKAction
+            let walkingAction = SKAction.repeatForever(
+                SKAction.animate(with: walkFrames,
+                                 timePerFrame: 0.1,
+                                 resize: false,
+                                 restore: true))
+            
+            run(walkingAction, withKey: walkingActionKey)
+        }
         
+        if foodLocation.x < position.x
+        {
+            //Food is left
+            position.x -= movementSpeed * CGFloat(deltaTime)
+            xScale = -1
+        }
+        else
+        {
+            //Food is right
+            position.x += movementSpeed * CGFloat(deltaTime)
+            xScale = 1
+        }
     }
 }

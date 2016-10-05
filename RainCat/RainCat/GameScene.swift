@@ -21,6 +21,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate
     
     private let whiteUmbrella = UmbrellaSprite.newInstance()
     private var cat: CatSprite!
+    private var food: FoodSprite!
     private let rainDropTexture = SKTexture(imageNamed: "rain_drop")
     
     override func sceneDidLoad()
@@ -97,7 +98,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate
     
     func spawnFood()
     {
-        let food = FoodSprite.newInstance()
+        food = FoodSprite.newInstance()
         var randomPosition: CGFloat = CGFloat(random.nextInt())
         randomPosition = randomPosition.truncatingRemainder(dividingBy: size.width - foodEdgeMargin * 2)
         randomPosition = CGFloat(abs(randomPosition))
@@ -152,6 +153,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         }
         
         whiteUmbrella.update(deltaTime: dt)
+        cat.update(deltaTime: dt, foodLocation: food.position)
     }
     
     func didBegin(_ contact: SKPhysicsContact)
