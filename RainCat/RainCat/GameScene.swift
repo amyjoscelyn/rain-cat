@@ -22,18 +22,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate
     private let whiteUmbrella = UmbrellaSprite.newInstance()
     private var cat: CatSprite!
     private var food: FoodSprite!
+    private let hud = HudNode()
     private let rainDropTexture = SKTexture(imageNamed: "rain_drop")
     
     override func sceneDidLoad()
     {
-        let label = SKLabelNode(fontNamed: "PixelDigivolve")
-        label.text = "Hello World!"
-        label.position = CGPoint(x: size.width / 2, y: size.height / 2)
-        label.zPosition = 1000
-        
-        addChild(label)
-        
         self.lastUpdateTime = 0
+        
+        hud.setup(size: size)
+        addChild(hud)
         
         var worldFrame = frame
         worldFrame.origin.x -= 100
@@ -102,6 +99,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         cat.position = CGPoint(x: whiteUmbrella.position.x, y: whiteUmbrella.position.y - 30)
         
         addChild(cat)
+        
+        hud.resetPoints()
     }
     
     func spawnFood()
@@ -220,6 +219,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         {
         case RainDropCategory:
             cat.hitByRain()
+            hud.resetPoints()
         case WorldFrameCategory:
             spawnCat()
         default:
@@ -246,8 +246,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         switch otherBody.categoryBitMask
         {
         case CatCategory:
-            //TO-DO: Increment points
-            print("Cat fed!")
+            hud.addPoint()
             fallthrough
         case WorldFrameCategory:
             foodBody.node?.removeFromParent()
