@@ -56,4 +56,103 @@ class MenuScene: SKScene
         highScoreNode.zPosition = 1
         addChild(highScoreNode)
     }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)
+    {
+        if let touch = touches.first
+        {
+            if selectedButton != nil
+            {
+                handleStartButtonHover(isHovering: false)
+                handleSoundButtonHover(isHovering: false)
+            }
+            
+            if startButton.contains(touch.location(in: self))
+            {
+                selectedButton = startButton
+                handleStartButtonHover(isHovering: true)
+            }
+            else if soundButton.contains(touch.location(in: self))
+            {
+                selectedButton = soundButton
+                handleSoundButtonHover(isHovering: true)
+            }
+        }
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?)
+    {
+        if let touch = touches.first
+        {
+            if selectedButton == startButton
+            {
+                handleStartButtonHover(isHovering: (startButton.contains(touch.location(in: self))))
+            }
+            else if selectedButton == soundButton
+            {
+                handleSoundButtonHover(isHovering: (soundButton.contains(touch.location(in: self))))
+            }
+        }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?)
+    {
+        if let touch = touches.first
+        {
+            if selectedButton == startButton
+            {
+                handleStartButtonHover(isHovering: false)
+                
+                if startButton.contains(touch.location(in: self))
+                {
+                    handleStartButtonClick()
+                }
+            }
+            else if selectedButton == soundButton
+            {
+                handleSoundButtonHover(isHovering: false)
+                
+                if soundButton.contains(touch.location(in: self))
+                {
+                    handleSoundButtonClicked()
+                }
+            }
+        }
+        
+        selectedButton = nil
+    }
+    
+    func handleStartButtonHover(isHovering: Bool)
+    {
+        if isHovering
+        {
+            startButton.texture = startButtonPressedTexture
+        }
+        else
+        {
+            startButton.texture = startButtonTexture
+        }
+    }
+    
+    func handleSoundButtonHover(isHovering: Bool)
+    {
+        if isHovering
+        {
+            soundButton.alpha = 0.5
+        }
+        else
+        {
+            soundButton.alpha = 1.0
+        }
+    }
+    
+    func handleStartButtonClick()
+    {
+        print("start clicked")
+    }
+    
+    func handleSoundButtonClicked()
+    {
+        print("sound clicked")
+    }
 }
