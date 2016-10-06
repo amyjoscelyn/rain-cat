@@ -16,7 +16,8 @@ class GameViewController: UIViewController
     {
         super.viewDidLoad()
         
-        let sceneNode = GameScene(size: view.frame.size)
+//        let sceneNode = GameScene(size: view.frame.size) //for when we want to show the game right away
+        let sceneNode = MenuScene(size: view.frame.size) //to show the menu first
         
         if let view = self.view as! SKView? {
             view.presentScene(sceneNode)
