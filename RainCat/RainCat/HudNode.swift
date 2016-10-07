@@ -21,6 +21,8 @@ class HudNode: SKNode
     private let quitButtonTexture = SKTexture(imageNamed: "quit_button")
     private let quitButtonPressedTexture = SKTexture(imageNamed: "quit_button_pressed")
     
+    var quitButtonAction : (() -> ())?
+    
     //Set up HUD here
     public func setup(size: CGSize)
     {
@@ -121,7 +123,10 @@ class HudNode: SKNode
     {
         if quitButton.contains(point)
         {
-            //TO-DO: Tell the game scene to quit the game
+            if quitButton.contains(point) && quitButtonAction != nil
+            {
+                quitButtonAction!()
+            }
         }
         
         quitButton.texture = quitButtonTexture

@@ -30,6 +30,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         self.lastUpdateTime = 0
         
         hud.setup(size: size)
+        
+        hud.quitButtonAction = {
+            let transition = SKTransition.reveal(with: .up, duration: 0.75)
+            
+            let gameScene = MenuScene(size: self.size)
+            gameScene.scaleMode = self.scaleMode
+            
+            self.view?.presentScene(gameScene, transition: transition)
+            
+            self.hud.quitButtonAction = nil
+        }
+        
         addChild(hud)
         
         var worldFrame = frame
