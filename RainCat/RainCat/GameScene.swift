@@ -122,7 +122,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         
         if let point = touchPoint
         {
-            whiteUmbrella.setDestination(destination: point)
+            hud.touchBeganAtPoint(point: point)
+            
+            if !hud.quitButtonPressed
+            {
+                whiteUmbrella.setDestination(destination: point)
+            }
         }
     }
     
@@ -132,7 +137,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         
         if let point = touchPoint
         {
-            whiteUmbrella.setDestination(destination: point)
+            hud.touchMovedToPoint(point: point)
+            
+            if !hud.quitButtonPressed
+            {
+                whiteUmbrella.setDestination(destination: point)
+            }
+        }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?)
+    {
+        let touchPoint = touches.first?.location(in: self)
+        
+        if let point = touchPoint
+        {
+            hud.touchEndedAtPoint(point: point)
         }
     }
     

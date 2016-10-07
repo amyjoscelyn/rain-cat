@@ -14,6 +14,7 @@ class SoundManager: NSObject, AVAudioPlayerDelegate //this delegate still depend
     
     var audioPlayer: AVAudioPlayer?
     var trackPosition = 0
+    private(set) var isMuted = false
     
     //Music: http://www.bensound.com/royalty-free-music
     static private let tracks = [
@@ -27,11 +28,15 @@ class SoundManager: NSObject, AVAudioPlayerDelegate //this delegate still depend
     {
         // This is private so you can only ever have one Sound Manager
         trackPosition = Int(arc4random_uniform(UInt32(SoundManager.tracks.count)))
+        
+        let defaults = UserDefaults.standard
+        
+        isMuted = defaults.bool(forKey: MuteKey)
     }
     
     public func startPlaying()
     {
-        if audioPlayer == nil || audioPlayer?.isPlaying == false
+        if !isMuted && (audioPlayer == nil || audioPlayer?.isPlaying == false)
         {
             let soundURL = Bundle.main.url(forResource: SoundManager.tracks[trackPosition], withExtension: "mp3")
             
@@ -62,5 +67,25 @@ class SoundManager: NSObject, AVAudioPlayerDelegate //this delegate still depend
     {
         //Play the next track
         startPlaying()
+    }
+    
+    func toggleMute() -> Bool
+    {
+        isMuted = !isMuted
+        
+        let defaults = UserDefaults.standard
+        defaults.set(isMuted, forKey: MuteKey)
+        defaults.synchronize()
+        
+        if isMuted
+        {
+            audioPlayer?.stop()
+        }
+        else
+        {
+            startPlaying()
+        }
+        
+        return isMuted
     }
 }

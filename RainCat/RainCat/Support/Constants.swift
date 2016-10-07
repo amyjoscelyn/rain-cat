@@ -15,3 +15,4 @@ let WorldFrameCategory : UInt32 = 0x1 << 4
 let CatCategory        : UInt32 = 0x1 << 5
 let FoodCategory       : UInt32 = 0x1 << 6
 let ScoreKey = "RAINCAT_HIGHSCORE"
+let MuteKey = "RAINCAT_MUTED"
